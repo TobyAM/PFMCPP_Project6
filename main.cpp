@@ -28,31 +28,22 @@ Create a branch named Part2
 #include <iostream>
 #include <string>
 struct T
-{
-    float value;
-    std::string name;
-    T(const float v, const char* ptr) :  //1
-    value(v),//2
-    name(ptr)//3
-    {}
+{    
+    T(const float v, const char* ptr) : value(v) {
+        if (ptr != nullptr) name = *ptr;
+        else name = "nullptr";
+    } //1
+
+    float value;        //2
+    std::string name;        //3
 };
 
 struct Comparer                                //4
 {   
-    T* compare(T* a, T* b) //5
+    const T* compare(const T& a, const T& b) //5
     {
-        if (a != nullptr && b != nullptr)
-        {
-            if( a->value < b->value )
-            {
-                return a;
-            }
-            if( a->value > b->value )
-            {
-                return b;
-            }
-        }
-
+        if( a.value < b.value ) return &a;
+        if( a.value > b.value ) return &b;
         return nullptr;
     }
 };
@@ -60,9 +51,8 @@ struct Comparer                                //4
 struct U
 {
     float x { 0 }, y { 0 };
-    float bringTogether(float& updatedValue)      //12
+    float bringTogether(const float& updatedValue)      //12
     {
-    
         std::cout << "U's x value: " << x << std::endl;
         x = updatedValue;
         std::cout << "U's x updated value: " << x << std::endl;
@@ -138,22 +128,12 @@ struct myType
 int main()
 {
     T tOne(33.3f, "tOne");                                             //6
-    T tTwo(55.0f, "tTwo" );                                        //6
-    
-
+    T tTwo(55.0f, "tTwo" );                                     //6
 
     Comparer f;                                          //7
-    auto* smaller = f.compare(&tOne, &tTwo);                              //8
-    //std::cout << "the smaller one is << " << (smaller != nullptr ? smaller->name : "smaller is nullptr!") << std::endl; //9
-    if( smaller != nullptr )
-    {
-       std::cout << "the smaller one is " << smaller->name << std::endl; 
-    }
-    else
-    {
-        std::cout << "a and b have the same value.\n";
-    }
-
+    auto* smaller = f.compare(tOne, tTwo);                              //8
+    //std::cout << "the smaller one is << " << (smaller != nullptr ? smaller->name : "smaller is nullptr!") << std::endl; //9    
+    std::cout << "the smaller one is " << smaller->name << std::endl; 
     U myUOne;
     float updatedValue = 5.f;
     std::cout << "[static func] myUOne's multiplied values: " << myType::bringTogether( myUOne, updatedValue) << std::endl;                  //11
