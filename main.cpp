@@ -27,20 +27,19 @@ Create a branch named Part2
 
 #include <iostream>
 #include <string>
-struct T
-{    
-    T(const float v, const char* ptr) : value(v) {
-        if (ptr != nullptr) name = *ptr;
-        else name = "nullptr";
-    } //1
-
-    float value;        //2
-    std::string name;        //3
+struct T  
+{
+    float value;
+    std::string name;
+    T(const float v, const char* ptr) :  //1
+    value(v),//2
+    name(ptr)//3
+    {}        //3
 };
 
 struct Comparer                                //4
 {   
-    const T* compare(const T& a, const T& b) //5
+    T* compare(T& a, T& b) //5
     {
         if( a.value < b.value ) return &a;
         if( a.value > b.value ) return &b;
